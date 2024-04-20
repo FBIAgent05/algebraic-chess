@@ -12,7 +12,7 @@ This is a simple console-based chess game implemented in C. The game follows the
 ## Features
 
 - Uses algebraic notation to control the pieces
-- Implements all standard chess rules: movement, captures, check, checkmate, stalemate, castling, and pawn promotion.
+- Implements all standard chess rules: movement, captures, check, checkmate, stalemate, castling, pawn promotion, and of course, en passant.
 - Uses Unicode and ASCII characters to represent the chessboard and pieces.
 - Supports two-player gameplay.
 - Displays helpful messages for invalid moves and game outcomes.
