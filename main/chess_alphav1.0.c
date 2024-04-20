@@ -546,9 +546,6 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         {
             memcpy(board, undo_board, sizeof undo_board);
 
-            fprintf(stderr, "%sLong castle is not possible%s", RED, RESET);
-            getchar();
-
             return 1;
         }
         
@@ -574,9 +571,6 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         if (castling(board, &W_king_moved, &W_queens_rook_moved, &W_kings_rook_moved, &B_king_moved, &B_queens_rook_moved, &B_kings_rook_moved, side, SHORT_CASTLE) == PREVENT_CASTLE)
         {
             memcpy(board, undo_board, sizeof undo_board);
-
-            fprintf(stderr, "%sShort castle is not possible%s", RED, RESET);
-            getchar();
 
             return 1;
         }
@@ -2478,6 +2472,8 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
             if (*W_king_moved)
             {
                 fprintf(stderr, "%sCastling is not possible%s", RED, RESET);
+                getchar();
+
                 return PREVENT_CASTLE;
             }
         break;
@@ -2486,6 +2482,8 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
             if (*B_king_moved)
             {
                 fprintf(stderr, "%sCastling cannot take place%s", RED, RESET);
+                getchar();
+
                 return PREVENT_CASTLE;
             }
         break;
