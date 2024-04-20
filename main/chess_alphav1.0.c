@@ -252,6 +252,7 @@ int Pos (int n);
 
 int main(void)
 {
+    clear( );
     welcome();
     
     clear();
@@ -388,7 +389,7 @@ void printBoard (coords back_board[S_BOARD][S_BOARD], int board[S_BOARD][S_BOARD
 
                 case b_dR: case b_lR:
                 case b_R1xx ... b_R8xx:
-                    printf("%s%s%s  ", BROWN, "♖", RESET);
+                    printf("%s%s%s  ", BROWN, "🨂", RESET);
                     break;
 
                 case b_dN: case b_lN:
