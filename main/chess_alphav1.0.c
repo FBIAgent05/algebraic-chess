@@ -190,9 +190,9 @@ typedef struct
 coords;
 
 
-void markBoard(coords back_board[S_BOARD][S_BOARD]);
+void markBoard(char back_board[S_BOARD][S_BOARD]);
 void initBoard(int board[S_BOARD][S_BOARD]);
-void printBoard (coords back_board[S_BOARD][S_BOARD], int board[S_BOARD][S_BOARD]);
+void printBoard (char back_board[S_BOARD][S_BOARD], int board[S_BOARD][S_BOARD]);
 
 int moveBoard(int board[S_BOARD][S_BOARD]);
 
@@ -257,7 +257,7 @@ int main(void)
     
     clear();
     
-    coords back_board[S_BOARD][S_BOARD];
+    char back_board[S_BOARD][S_BOARD];
     memset(back_board, 0, sizeof back_board);
 
     int board[S_BOARD][S_BOARD];
@@ -280,17 +280,17 @@ int main(void)
     return 0;
 }
 
-void markBoard (coords back_board[S_BOARD][S_BOARD])
+void markBoard (char back_board[S_BOARD][S_BOARD])
 {
     for (int i = 0; i < S_BOARD; i++)
     {
         for (int j = 0; j < S_BOARD; j++)
         {
             if ((i + j) % 2 == 0)
-                back_board[j][i].tile = '+';
+                back_board[j][i] = '+';
 
             else    
-                back_board[j][i].tile = '.';
+                back_board[j][i] = '.';
         }
     }
 }
@@ -341,7 +341,7 @@ void initBoard(int board[S_BOARD][S_BOARD])
 }
 
 
-void printBoard (coords back_board[S_BOARD][S_BOARD], int board[S_BOARD][S_BOARD])
+void printBoard (char back_board[S_BOARD][S_BOARD], int board[S_BOARD][S_BOARD])
 {
     printf("\n    ______________________\n");    
     
@@ -412,7 +412,7 @@ void printBoard (coords back_board[S_BOARD][S_BOARD], int board[S_BOARD][S_BOARD
                     break; 
 
                 default:
-                    printf("%c  ", back_board[j][i].tile);
+                    printf("%c  ", back_board[j][i]);
                     break;
            }
         }
