@@ -7203,7 +7203,7 @@ void slowText (const char *str)
 void welcome (void)
 {
     slowText("Chess v1.0\n");
-    slowText("Author: FBIAgent05\n");
+    slowText("Author: FBIAgent05\n\n");
     slowText("Loading Chess\n");
     
     for (int i = 0; i <= 100; i++)
