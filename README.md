@@ -20,18 +20,18 @@ To compile and run the chess game, follow these steps:
 1. Clone the repository:
 
 ```bash
-   git clone https://github.com/FBIAgent05/algebraic_chess
+git clone https://github.com/FBIAgent05/algebraic_chess
 ```
 
 2. Navigate the repository
 
 ```bash
-   cd ./main
+cd ./main
 ```
 3. Compile the source code
 
 ```bash
-   gcc -o chess_alphav1.0 chess_alphav1.0.c
+gcc -o chess_alphav1.0 chess_alphav1.0.c
 ```
 
 4. Run the executable
@@ -44,3 +44,4 @@ To compile and run the chess game, follow these steps:
   Refer to this Wikipedia article
   
   https://en.wikipedia.org/wiki/Algebraic_notation_(chess)#Notation_for_moves
+
