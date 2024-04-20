@@ -545,10 +545,26 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         if (castling(board, &W_king_moved, &W_queens_rook_moved, &W_kings_rook_moved, &B_king_moved, &B_queens_rook_moved, &B_kings_rook_moved, side, LONG_CASTLE) == PREVENT_CASTLE)
         {
             memcpy(board, undo_board, sizeof undo_board);
+
+            fprintf(stderr, "%sLong castle is not possible%s", RED, RESET);
+            getchar();
+
             return 1;
         }
+        
 
-        // mark king and rook as moved
+        switch (king)
+        {
+            case w_K:
+                W_king_moved = true;
+            break;
+
+            case b_K:
+                B_king_moved = true;
+            break;
+        }
+
+
         count_moves++;
         return 0;
     }
@@ -558,8 +574,28 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         if (castling(board, &W_king_moved, &W_queens_rook_moved, &W_kings_rook_moved, &B_king_moved, &B_queens_rook_moved, &B_kings_rook_moved, side, SHORT_CASTLE) == PREVENT_CASTLE)
         {
             memcpy(board, undo_board, sizeof undo_board);
+
+            fprintf(stderr, "%sShort castle is not possible%s", RED, RESET);
+            getchar();
+
             return 1;
         }
+
+
+
+
+
+        switch (king)
+        {
+            case w_K:
+                W_king_moved = true;
+            break;
+
+            case b_K:
+                B_king_moved = true;
+            break;
+        }
+
 
         count_moves++;
         return 0;
@@ -2440,12 +2476,18 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
     {
         case 0:
             if (*W_king_moved)
-                return fprintf(stderr, "%sCastling is not possible%s", RED, RESET);
+            {
+                fprintf(stderr, "%sCastling is not possible%s", RED, RESET);
+                return PREVENT_CASTLE;
+            }
         break;
 
         case 1:
             if (*B_king_moved)
-                return fprintf(stderr, "%sCastling cannot take place%s", RED, RESET);
+            {
+                fprintf(stderr, "%sCastling cannot take place%s", RED, RESET);
+                return PREVENT_CASTLE;
+            }
         break;
     }
     
@@ -2463,7 +2505,10 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
                     for (int i = b; i < e; i++)
                     {
                         if (board[i][Pos(1)])
-                            return fprintf (stderr, "%sPieces are blocking the king and rook in long castle%s", RED, RESET);
+                        {
+                            fprintf (stderr, "%sPieces are blocking the king and rook in long castle%s", RED, RESET);
+                            return PREVENT_CASTLE;
+                        }
                     }
 
                 break;
@@ -2473,7 +2518,10 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
                     for (int i = f; i < h; i++)
                     {
                         if (board[i][Pos(1)])
-                            return fprintf (stderr, "%sPieces are blocking the king and rook in short castle%s", RED, RESET);
+                        {
+                            fprintf (stderr, "%sPieces are blocking the king and rook in short castle%s", RED, RESET);
+                            return PREVENT_CASTLE;
+                        }
                     }
 
                 break;
@@ -2491,7 +2539,10 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
                     for (int i = b; i < e; i++)
                     {
                         if (board[i][Pos(8)])
-                            return fprintf(stderr, "%sPieces are blocking the king and the rook in long castle%s", RED, RESET);
+                        {
+                            fprintf(stderr, "%sPieces are blocking the king and the rook in long castle%s", RED, RESET);
+                            return PREVENT_CASTLE;
+                        }
                     }
 
                 break;
@@ -2501,7 +2552,10 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
                     for (int i = f; i < h; i++)
                     {
                         if (board[i][Pos(8)])
-                            return fprintf(stderr, "%sPieces are blocking the king and the rook in short castle%s", RED, RESET);
+                        {
+                            fprintf(stderr, "%sPieces are blocking the king and the rook in short castle%s", RED, RESET);
+                            return PREVENT_CASTLE;
+                        }
                     }
 
                 break;
@@ -2519,7 +2573,10 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
                 case LONG_CASTLE:
 
                     if (*W_queens_rook_moved)
-                        return fprintf(stderr, "%sQueen's rook already made it's move, therefore long castle is invalid%s", RED, RESET); 
+                    {
+                        fprintf(stderr, "%sQueen's rook already made it's move, therefore long castle is invalid%s", RED, RESET); 
+                        return PREVENT_CASTLE;
+                    }
 
                     board[c][Pos(1)] = w_K;
                     board[d][Pos(1)] = w_dR;
@@ -2530,7 +2587,10 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
 
                 case SHORT_CASTLE:
                     if (*W_kings_rook_moved)
-                        return fprintf(stderr, "%sKing's rook already has made a move, therefore short castle is invalid%s", RED, RESET);
+                    {
+                        fprintf(stderr, "%sKing's rook already has made a move, therefore short castle is invalid%s", RED, RESET);
+                        return PREVENT_CASTLE;
+                    }
 
                     board[g][Pos(1)] = w_K;
                     board[f][Pos(1)] = w_lR;
@@ -2550,7 +2610,10 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
                 case LONG_CASTLE:
 
                     if (*B_queens_rook_moved)
-                        return fprintf (stderr, "%sQueen's rook has already made a move, thus long castle cannot be done%s", RED, RESET);
+                    {
+                        fprintf (stderr, "%sQueen's rook has already made a move, thus long castle cannot be done%s", RED, RESET);
+                        return PREVENT_CASTLE;
+                    }
 
                     board[c][Pos(8)] = b_K;
                     board[d][Pos(8)] = b_lR;
@@ -2562,7 +2625,10 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
                 case SHORT_CASTLE:
 
                     if (*B_kings_rook_moved)
-                        return fprintf (stderr, "%sKing's rook has already made a move, thus short castle is illegal%s", RED, RESET);
+                    {
+                        fprintf (stderr, "%sKing's rook has already made a move, thus short castle is illegal%s", RED, RESET);
+                        return PREVENT_CASTLE;
+                    }
 
                     board[g][Pos(8)] = b_K;
                     board[f][Pos(8)] = b_dR;
