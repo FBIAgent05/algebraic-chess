@@ -540,8 +540,7 @@ int moveBoard(int board[S_BOARD][S_BOARD])
     static bool B_kings_rook_moved = false;
 
 
-
-    if (strncmp(input, "O-O-O", MAX_CHAR) == 0)
+    if (strncmp(input, "O-O-O", MAX_CHAR) == 0 || strncmp(input, "0-0-0", MAX_CHAR) == 0)
     {
         if (castling(board, &W_king_moved, &W_queens_rook_moved, &W_kings_rook_moved, &B_king_moved, &B_queens_rook_moved, &B_kings_rook_moved, side, LONG_CASTLE) == PREVENT_CASTLE)
         {
@@ -554,7 +553,7 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         return 0;
     }
 
-    if (strncmp(input, "O-O", MAX_CHAR) == 0)
+    if (strncmp(input, "O-O", MAX_CHAR) == 0 || strncmp(input, "0-0", MAX_CHAR) == 0)
     {
         if (castling(board, &W_king_moved, &W_queens_rook_moved, &W_kings_rook_moved, &B_king_moved, &B_queens_rook_moved, &B_kings_rook_moved, side, SHORT_CASTLE) == PREVENT_CASTLE)
         {
