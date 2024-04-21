@@ -182,8 +182,6 @@ enum p_black_promotion
 typedef struct 
 {
     int piece;
-    char tile;
-
     int x;
     int y;
 }
