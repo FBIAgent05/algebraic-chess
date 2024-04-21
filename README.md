@@ -40,12 +40,12 @@ cd ./algebraic-chess/main
 3. Compile the source code
 
 ```bash
-gcc -o chess_alphav1.0 chess_alphav1.0.c
+gcc -o chess_alpha chess_alpha.c
 ```
 
 4. Run the executable
 ```bash
-./chess_alphav1.0
+./chess_alpha
 ```
 
 
