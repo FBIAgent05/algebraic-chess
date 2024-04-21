@@ -4577,7 +4577,7 @@ int checkmate (int board[S_BOARD][S_BOARD], const int side)
     bool search_leftbottom = false;
     bool search_rightbottom = false;
 
-    bool can_block_checkmate = true;
+    bool can_block_checkmate = false;
 
 
 
