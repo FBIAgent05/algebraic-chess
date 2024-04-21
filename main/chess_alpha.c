@@ -46,8 +46,8 @@
 #define PREVENT_CASTLE 5
 
 #define RED "\033[31m"
-#define WHITE "\033[38;2;255;253;208m"
-#define BROWN "\033[38;2;150;75;0m"
+#define WHITE "\x1b[38;5;230m"
+#define BROWN "\x1b[38;5;94m"
 #define RESET "\033[0m"
 
 enum {a, b, c, d, e, f, g, h};
