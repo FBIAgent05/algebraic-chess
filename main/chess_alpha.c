@@ -257,20 +257,12 @@ int Pos (int n);
 
 int main(void)
 {
-    char back_board[S_BOARD][S_BOARD];
     int board[S_BOARD][S_BOARD];
-
-    memset(back_board, '\0', sizeof back_board);
-    memset(board, 0, sizeof board);
-
-
     initBoard(board);
-
-
+  
     clear();
     welcome();
-    
-
+  
     while (gameinProgress())
     {
         clear();
@@ -286,14 +278,7 @@ int main(void)
 void initBoard(int board[S_BOARD][S_BOARD])
 {
     // clear board by filling with zeros
-    for (int i = 0; i < S_BOARD; i++)
-    {
-        for (int j = 0; j < S_BOARD; j++)
-        {
-            board[j][i] = 0;
-        }
-    }
-
+    memset(board, 0, sizeof board);
     
     // initialize white pieces
     board[a][Pos(1)] = w_dR;
