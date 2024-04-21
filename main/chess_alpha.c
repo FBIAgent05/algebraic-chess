@@ -3690,10 +3690,6 @@ int sightKnight (int board[S_BOARD][S_BOARD], const int king, const int purpose,
     findPiece(find_knight, board, KNIGHT, &count, enemy_king);
 
 
-    if (count == 0)
-        goto end;
-
-
     switch (purpose)
     {
         case LONG_CASTLE:
@@ -4935,6 +4931,12 @@ int checkmate (int board[S_BOARD][S_BOARD], const int side)
 
 
     coords savior;
+
+        
+    savior.x = -1;
+    savior.y = -1;
+    savior.piece = -1;
+
 
 
 
