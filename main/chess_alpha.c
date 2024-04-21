@@ -7176,8 +7176,9 @@ void welcome (void)
     char ch;
 
 
-    slowText("Chess v1.0\n");
-    slowText("Author: FBIAgent05\n\n");
+    slowText("algebraic-chess v1.0\n");
+    slowText("Developer: FBIAgent05\n\n");
+    slowText("Source Code: https://github.com/FBIAgent05/algebraic-chess/");
 
 
 
