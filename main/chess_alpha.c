@@ -7177,8 +7177,8 @@ void welcome (void)
 
 
     slowText("algebraic-chess v1.0\n");
-    slowText("Developer: FBIAgent05\n\n");
-    slowText("Source Code: https://github.com/FBIAgent05/algebraic-chess/");
+    slowText("Developer: FBIAgent05\n);
+    slowText("Source Code: https://github.com/FBIAgent05/algebraic-chess/\n\n");
 
 
 
