@@ -2714,11 +2714,6 @@ int sightPawn (int board[S_BOARD][S_BOARD], const int king, const int purpose, c
     findPiece(find_pawn, board, PAWN, &count, enemy_king);
 
 
-
-    if (count == 0)
-        goto end;
-
-
     switch (purpose)
     {
         case LONG_CASTLE:
@@ -3073,11 +3068,6 @@ int sightRook (int board[S_BOARD][S_BOARD], const int king, const int purpose, c
     findPiece(find_rook, board, ROOK, &count, enemy_king);
 
 
-
-    if (count == 0)
-        goto end;
-
-
     switch (purpose)
     {
         case LONG_CASTLE:
@@ -3163,8 +3153,7 @@ int sightRook (int board[S_BOARD][S_BOARD], const int king, const int purpose, c
         break;
 
 
-
-
+      
         case SCAN:
 
 
@@ -3351,12 +3340,6 @@ int sightBishop (int board[S_BOARD][S_BOARD], const int king, const int purpose,
 
     bool prevent_castle = false;
     bool check = false;
-
-
-
-
-    if (count == 0)
-        goto end;
 
 
     switch (purpose)
@@ -3924,10 +3907,6 @@ int sightQueen (int board[S_BOARD][S_BOARD], const int king, const int purpose, 
 
 
     findPiece(find_queen, board, QUEEN, &count, enemy_king);
-
-
-    if (count == 0)
-        goto end;
 
 
     switch (purpose)
