@@ -247,34 +247,34 @@ bool isRangeNum (char num);
 bool checkBounds (int n);
 int isaPiece (char piece);
 
+bool gameinProgress();
+bool proceedGame (bool n);
+
 void clear (void);
 int Pos (int n);
 
 int main(void)
 {
-    clear( );
+    clear();
     welcome();
     
-    clear();
-    
+
     char back_board[S_BOARD][S_BOARD];
-    memset(back_board, 0, sizeof back_board);
-
     int board[S_BOARD][S_BOARD];
-    memset(board, 0, sizeof board);
 
+    memset(back_board, '\0', sizeof back_board);
+    memset(board, 0, sizeof board);
 
 
     markBoard(back_board);
     initBoard(board);
 
-
-    while (1)
+    while (gameinProgress())
     {
+        clear();
+
         printBoard(back_board, board);
         moveBoard(board);
-
-        clear();
     }
 
     return 0;
@@ -488,8 +488,11 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         printf("\n%s is checkmated\n", what_side);
         printf("%s wins the match!\n", deliver_side);
         printf("Total moves: %d\n", count_moves / 2 + 1);
-        getchar();
-        exit (EXIT_SUCCESS);
+        
+        proceedGame(false);
+
+        usleep(1000000);
+        return 0;        
     }
 
     else if (theAllSeeingEye(board, king, CHECK) == CHECK)
@@ -503,9 +506,11 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         printf("\nStalemate\n");
         printf("Game declared as draw!\n");
         printf("Total moves: %d\n", count_moves / 2 + 1);
-        getchar();
+        
+        proceedGame(false);
 
-        exit (EXIT_SUCCESS);
+        usleep(1000000);
+        return 0;
     }
 
 
@@ -545,6 +550,7 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         if (castling(board, &W_king_moved, &W_queens_rook_moved, &W_kings_rook_moved, &B_king_moved, &B_queens_rook_moved, &B_kings_rook_moved, side, LONG_CASTLE) == PREVENT_CASTLE)
         {
             memcpy(board, undo_board, sizeof undo_board);
+            usleep(700000);        
 
             return 1;
         }
@@ -572,6 +578,7 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         {
             memcpy(board, undo_board, sizeof undo_board);
 
+            usleep(700000);        
             return 1;
         }
 
@@ -793,6 +800,7 @@ int moveBoard(int board[S_BOARD][S_BOARD])
                     else
                     {
                         fprintf(stdout, "%sAppend 'x' after the piece to capture%s", RED, RESET);
+
                         return -1;
                     }
                     // insert function
@@ -832,6 +840,7 @@ int moveBoard(int board[S_BOARD][S_BOARD])
                     else
                     {
                         fprintf(stdout, "%sInvalid capture%s", RED, RESET);
+
                         return -1;
                     }
 
@@ -860,6 +869,7 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         default:
         {
             fprintf(stdout, "%sPieces are denoted in uppercase%s", RED, RESET);
+
             return -1;
         }
     }    
@@ -882,12 +892,9 @@ int moveBoard(int board[S_BOARD][S_BOARD])
     if (invalid_move)
     {
         fprintf(stderr, "\n%sInvalid move%s\n", RED, RESET);
-        printf("Press enter to continue: ");
-        getchar();
 
-        // count moves doesnt count if move is invalid
-        count_moves--;
-        goto end;
+        usleep(700000);        
+        return -1;
     }
 
     else
@@ -914,8 +921,10 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         printf("%s wins the match!\n", deliver_side);
         printf("Total moves: %d\n", count_moves / 2 + 1);
 
-        getchar();
-        exit (EXIT_SUCCESS);
+        proceedGame(false);
+
+        usleep(1000000);        
+        return 0;
     }
 
     else if (theAllSeeingEye(board, king, CHECK) == CHECK)
@@ -933,18 +942,15 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         printf("Game declared as draw!\n");
         printf("Total moves: %d\n", count_moves / 2 + 1);
 
+        proceedGame(false);
 
-        getchar();
-
-        exit (EXIT_SUCCESS);
+        usleep(1000000);       
+        return 0; 
     }
 
 
-    end:
 
-
-
-
+    // move success
     count_moves++;
 
     return 0;
@@ -976,9 +982,6 @@ int movePawn(int board[S_BOARD][S_BOARD], int orig_let, char capture, int dest_l
     int cnt_pawn = 0;
 
     int king = 0;
-    int collect_enemy = 0;
-    int collect_ally = 0;
-    int enemy_king = 0;
 
     int last_rank = 0;
 
@@ -998,18 +1001,12 @@ int movePawn(int board[S_BOARD][S_BOARD], int orig_let, char capture, int dest_l
     {
         case 0:
             king = w_K;
-            collect_ally = WHITE_P;
-            enemy_king = b_K;
-            collect_enemy = BLACK_P;
             last_rank = Pos(8);
         break;
 
 
         case 1:
             king = b_K;
-            collect_ally = BLACK_P;
-            enemy_king = w_K;
-            collect_enemy = WHITE_P;
             last_rank = Pos(1);
         break;
     }
@@ -1099,6 +1096,9 @@ int movePawn(int board[S_BOARD][S_BOARD], int orig_let, char capture, int dest_l
 
     // if there is no pawn capture, then there should be no gap between orig_x and dest_x
     if (abs(orig_x - dest_x) != 0)
+        return -1;
+
+    if (capture == 'x' && abs(orig_x - dest_x) == 0)
         return -1;
 
 
@@ -1933,7 +1933,7 @@ int moveKnight (int board[S_BOARD][S_BOARD], int orig_let, char orig_num, int de
     }
 
 
-    else if (found == 2)
+    else if (specify_file)
     {
         for (int i = 0 ; i < found; i++)
         {
@@ -2472,8 +2472,6 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
             if (*W_king_moved)
             {
                 fprintf(stderr, "%sCastling is not possible%s", RED, RESET);
-                getchar();
-
                 return PREVENT_CASTLE;
             }
         break;
@@ -2482,8 +2480,6 @@ int castling (int board[S_BOARD][S_BOARD], bool *W_king_moved, bool *W_queens_ro
             if (*B_king_moved)
             {
                 fprintf(stderr, "%sCastling cannot take place%s", RED, RESET);
-                getchar();
-
                 return PREVENT_CASTLE;
             }
         break;
@@ -2695,6 +2691,13 @@ int sightPawn (int board[S_BOARD][S_BOARD], const int king, const int purpose, c
     coords find_pawn[8];
     int count = 0;
 
+    coords pawn_scan[8];
+    int cnt_scan = 0;
+
+    int collect_enemy = 0;
+
+
+
     bool check = false;
     bool prevent_castle = false;
 
@@ -2829,11 +2832,6 @@ int sightPawn (int board[S_BOARD][S_BOARD], const int king, const int purpose, c
         break;
 
         case SCAN:
-
-            coords pawn_scan[8];
-            int cnt_scan = 0;
-
-            int collect_enemy = 0;
 
 
             switch (king)
@@ -3060,6 +3058,9 @@ int sightRook (int board[S_BOARD][S_BOARD], const int king, const int purpose, c
     coords find_rook[MAX_PCS];
     int count = 0;
 
+    coords rook_scan[MAX_PCS];
+
+
     int enemy_king = 0;
 
     bool prevent_castle = false;
@@ -3180,7 +3181,6 @@ int sightRook (int board[S_BOARD][S_BOARD], const int king, const int purpose, c
 
         case SCAN:
 
-            coords rook_scan[MAX_PCS];
 
             if (savior != NULL)
             {
@@ -3320,7 +3320,6 @@ int sightRook (int board[S_BOARD][S_BOARD], const int king, const int purpose, c
     if (prevent_castle)
     {
         printf("castling not possible\n");
-        getchar();
         return PREVENT_CASTLE;
     }
 
@@ -3334,6 +3333,9 @@ int sightBishop (int board[S_BOARD][S_BOARD], const int king, const int purpose,
 {
     coords find_bishop[MAX_PCS];
     int count = 0;
+
+    coords bishop_scan[MAX_PCS];
+    int cnt_scan = 0;
 
     int enemy_king = 0;
 
@@ -3533,8 +3535,7 @@ int sightBishop (int board[S_BOARD][S_BOARD], const int king, const int purpose,
 
         case SCAN:
 
-            coords bishop_scan[MAX_PCS];
-            int cnt_scan = 0;
+
             
             findPiece(bishop_scan, board, BISHOP, &cnt_scan, king);
 
@@ -3683,11 +3684,15 @@ int sightBishop (int board[S_BOARD][S_BOARD], const int king, const int purpose,
 int sightKnight (int board[S_BOARD][S_BOARD], const int king, const int purpose, const int x_scan, const int y_scan, coords *savior)
 {
     coords find_knight[MAX_PCS];
+    int count = 0;
+
+
+    coords knight_scan[MAX_PCS];
+    int cnt_scan = 0;
 
 
     int enemy_king = 0;
 
-    int count = 0;
     bool prevent_castle = false;
     bool check = false;
 
@@ -3805,8 +3810,6 @@ int sightKnight (int board[S_BOARD][S_BOARD], const int king, const int purpose,
 
         case SCAN:
 
-            coords knight_scan[MAX_PCS];
-            int cnt_scan = 0;
 
             if (savior != NULL)
             {
@@ -3904,6 +3907,10 @@ int sightQueen (int board[S_BOARD][S_BOARD], const int king, const int purpose, 
 {
     coords find_queen[MAX_PCS];
     int count = 0;
+
+    coords queen_scan[MAX_PCS];
+    int cnt_scan = 0;
+
 
     int enemy_king = 0;
 
@@ -4133,9 +4140,6 @@ int sightQueen (int board[S_BOARD][S_BOARD], const int king, const int purpose, 
 
 
         case SCAN:
-
-            coords queen_scan[MAX_PCS];
-            int cnt_scan = 0;
 
             if (savior != NULL)
             {
@@ -4584,14 +4588,10 @@ int checkmate (int board[S_BOARD][S_BOARD], const int side)
     int king = 0;
     int collect_ally = 0;
     int collect_enemy = 0;
-    int enemy_king = 0;
+    //int enemy_king = 0;
 
 
-    int count_valid_moves = 0;
     int count_invalid_moves = 0;
-
-
-
 
 
 
@@ -4623,14 +4623,14 @@ int checkmate (int board[S_BOARD][S_BOARD], const int side)
     {
         case 0:
             king = w_K;
-            enemy_king = b_K;
+            //enemy_king = b_K;
             collect_ally = WHITE_P;
             collect_enemy = BLACK_P;
             break;
         
         case 1:
             king = b_K;
-            enemy_king = w_K;
+            //enemy_king = w_K;
             collect_ally = BLACK_P;
             collect_enemy = WHITE_P;
             break;
@@ -5210,7 +5210,16 @@ int theAllSeeingEye (int board[S_BOARD][S_BOARD], const int king, const int purp
 
 
 int theCheckmateLastStand (int board[S_BOARD][S_BOARD], const int king, const int x_scan, const int y_scan, coords *savior, int purpose)
-{
+{  
+    int tmp_board[S_BOARD][S_BOARD];
+    memcpy(tmp_board, board, sizeof tmp_board);
+
+    coords find_king;
+
+    int enemy_king = 0;
+    
+    
+    
     switch (purpose)
     {
         case BLOCK:
@@ -5237,18 +5246,6 @@ int theCheckmateLastStand (int board[S_BOARD][S_BOARD], const int king, const in
 
         case ASSASSINATE:
             
-            
-            
-            int tmp_board[S_BOARD][S_BOARD];
-            memcpy(tmp_board, board, sizeof tmp_board);
-
-            coords find_king;
-
-            //bool found_attacker = false;
-
-
-
-            int enemy_king = 0;
 
             switch (king)
             {
@@ -5347,8 +5344,6 @@ int theCheckmateLastStand (int board[S_BOARD][S_BOARD], const int king, const in
                         memcpy(board, tmp_board, sizeof tmp_board);
 
                         printf("Attempt to capture knight still in check\n");
-                        getchar();
-
                         return CHECK;
                     }
 
@@ -6755,31 +6750,23 @@ int capturePawn (int board[S_BOARD][S_BOARD], coords find_pawn[], const int cnt_
 
 
     int direction_capture = 0;
-    int direction_find = 0;
-
-    int last_rank = 0;
 
     int en_passant_pos = 0;
 
     
     bool en_passant_proceed = false;
-    bool left_capture = false;
-    bool right_capture = false;
+
 
     // if orig_x is greater then, left capture
     if (orig_x > dest_x)
     {
-        direction_find = 1;
         direction_capture = -1;
-        left_capture = true;
     }
 
     // else, then right capture
     else
     {
-        direction_find = -1;
         direction_capture = 1;
-        right_capture = true;
     }
 
     
@@ -6794,7 +6781,7 @@ int capturePawn (int board[S_BOARD][S_BOARD], coords find_pawn[], const int cnt_
 
 
     
-    int enemy_king = 0;
+    //int enemy_king = 0;
     int collect_enemy = 0;
 
 
@@ -6803,18 +6790,16 @@ int capturePawn (int board[S_BOARD][S_BOARD], coords find_pawn[], const int cnt_
     switch (king)
     {
         case w_K:
-            enemy_king = b_K;
+            //enemy_king = b_K;
             collect_enemy = BLACK_P;
             y_increment = 1;
-            last_rank = Pos(8);
             en_passant_pos = Pos(6);
         break;
 
         case b_K:
-            enemy_king = w_K;
+            //enemy_king = w_K;
             collect_enemy = WHITE_P;
             y_increment = -1;
-            last_rank = Pos(1);
             en_passant_pos = Pos(3);
         break;
     }
@@ -7252,6 +7237,21 @@ void welcome (void)
 
 #endif
 
+
+bool gameinProgress ()
+{
+    return proceedGame(true);
+}
+
+bool proceedGame (bool n)
+{
+    static bool proceed = true;
+
+    if (!n)
+        proceed = false;
+
+    return proceed;
+}
 
 
 
