@@ -1919,7 +1919,7 @@ int moveKnight (int board[S_BOARD][S_BOARD], int orig_let, char orig_num, int de
     }
 
 
-    else if (specify_file)
+    else if (specify_file || found == 2)
     {
         for (int i = 0 ; i < found; i++)
         {
