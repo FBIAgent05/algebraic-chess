@@ -278,7 +278,7 @@ int main(void)
 void initBoard(int board[S_BOARD][S_BOARD])
 {
     // clear board by filling with zeros
-    memset(board, 0, sizeof board);
+    memset(board, 0, sizeof (int) * S_BOARD * S_BOARD);
     
     // initialize white pieces
     board[a][Pos(1)] = w_dR;
