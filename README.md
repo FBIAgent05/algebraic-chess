@@ -62,7 +62,7 @@ make
 
   ## How to Play
 
-### Moving
+### 1) Moving
 
   Identify the piece notation letter and specify its destination square:<br>
 
@@ -74,7 +74,7 @@ make
   Pawn moves to ```e4``` would be ```e4```<br>
 
 
-  ### Capture
+  ### 2) Capture
 
   To capture, append  ```x``` as the second character input<br>
   The program automatically add this   ```x``` for you by the way
@@ -84,13 +84,13 @@ make
   Rook captures piece in ```a8 ``` square                                     --> ```Rxa8```<br>
 
 
-  ### Castling
+  ### 3) Castling
 
   Long Castle  --> ```O-O-O``` or ```0-0-0```<br>
   Short Castle --> ```O-O``` or ```0-0``` <br>
   
   
-### Promotion
+### 4) Promotion
 
 Pawn move to last rank then specify the promotion piece
 
@@ -98,7 +98,7 @@ Example:<br>
 Pawn moves to e8 and promotes to a knight                                                                            --> ```e8N```<br>
 Pawn captures piece from ```h``` file to ```g8``` and promotes to a Queen    -->  ```hxg8Q```<br>
 
-### En passant
+### 5) En passant
 
 Important note:
 En passant destination is not equal to the enemy pawn piece's square
