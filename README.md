@@ -16,10 +16,16 @@ This is a simple console-based chess game implemented in C. The game follows the
 - Uses Unicode and ASCII characters to represent the chessboard and pieces.
 - Supports two-player gameplay.
 - Displays helpful messages for invalid moves and game outcomes.
-- Saves game to a PGN file (relatively new feature).
 
 <br>
 
+
+**Update in 2024-05-02**
+- Saves game to a PGN file
+- Multiple source files
+- ~~Less spaghetti code~~
+
+<br>
 
 
 ## Installation
