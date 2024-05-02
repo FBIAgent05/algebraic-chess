@@ -154,7 +154,7 @@ int outcome (int board[S_BOARD][S_BOARD], const int count_moves, const int king)
 }
 
 
-bool displayASCII()
+bool displayASCII(void)
 {
     return useASCII(false);
 }
@@ -170,7 +170,7 @@ bool useASCII (bool x)
     return proceed;
 }
 
-bool gameinProgress ()
+bool gameinProgress (void)
 {
     return proceedGame(true);
 }
@@ -213,7 +213,6 @@ int moveBoard(int board[S_BOARD][S_BOARD])
     static bool recorded_check = false;
     static bool check = false;
 
-    bool invalid_move = false;
 
     bool checkmate = false;
     bool stalemate = false;
@@ -225,8 +224,6 @@ int moveBoard(int board[S_BOARD][S_BOARD])
     int king = count_moves % 2 ? b_K : w_K;
 
 
-    printf("%s%s%s >> %s\n", WHITE, displayASCII() ? "W" : "♚", RESET, white_previous_input);
-    printf("%s%s%s >> %s\n", BROWN, displayASCII() ? "B" : "♚", RESET, black_previous_input);
 
 
 
@@ -296,13 +293,14 @@ int moveBoard(int board[S_BOARD][S_BOARD])
     }
 
 
+    printf("%s%s%s >> %s\n", WHITE, displayASCII() ? "W" : "♚", RESET, white_previous_input);
+    printf("%s%s%s >> %s\n", BROWN, displayASCII() ? "B" : "♚", RESET, black_previous_input);
 
     printf("\n%s --> Enter move #%d: ", count_moves % 2 ? "Black" : "White", count_moves / 2 + 1);
     stringInput(input, MAX_CHAR);
 
 
 
-    /* Welcome to input refinery!*/
 
     moveSet newMove;
     moveSet *move = &newMove;
@@ -323,7 +321,7 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         return 0;
     }
 
-    if (strncmp(input, "O-O", MAX_CHAR) == 0 || strncmp(input, "0-0", MAX_CHAR) == 0)
+    else if (strncmp(input, "O-O", MAX_CHAR) == 0 || strncmp(input, "0-0", MAX_CHAR) == 0)
     {
         if (castling(board, SHORT_CASTLE, king) == PREVENT_CASTLE)
         {
@@ -338,8 +336,120 @@ int moveBoard(int board[S_BOARD][S_BOARD])
     }
 
 
-    /* Great Barrier of Input Validation */
 
+    if (parser(board, input, move, king))
+        return -1;
+
+
+
+    // reset
+    check = false;
+
+    switch (outcome(board, count_moves, king))
+    {
+        case CHECKMATE: 
+            proceedGame(false);
+            checkmate = true;
+            break;
+        
+        case STALEMATE:
+            proceedGame(false);
+            stalemate = true;
+            break;
+
+        case ISCHECK:
+            printf("Check after\n");
+            pawnMoved(0, UNDO);
+            memcpy(board, undo_board, sizeof undo_board);
+
+
+            check = true;
+            break;
+    }
+
+
+
+    if (!check)
+    {
+        switch (king)
+        {
+            case w_K:
+                fprintf(record, "\n");
+                fflush(record);
+                break;
+        }
+    }
+
+
+    if (!check)
+    {
+        existing_pieces_after = countExistingPieces(board);
+
+
+        switch (king)
+        {
+            case w_K:
+                strncpy(white_previous_input, input, MAX_CHAR);
+                white_previous_input[MAX_CHAR - 1] = '\0';
+            break;
+
+            case b_K:
+                strncpy(black_previous_input, input, MAX_CHAR);
+                black_previous_input[MAX_CHAR - 1] = '\0';
+            break;
+        }
+
+        // if number of pieces before is greater, then implies that capture took place
+        if (existing_pieces_before > existing_pieces_after)
+        {
+            switch (king)
+            {
+                case w_K:
+                    insertXforCapture(white_previous_input);
+                    break;
+
+                case b_K:
+                    insertXforCapture(black_previous_input);
+                    break;
+            }
+        }
+
+        switch (king)
+        {
+            case w_K:
+                fprintf(record, "%d. %-10s", count_moves / 2 + 1, white_previous_input);
+                break;
+
+            case b_K:
+                fprintf(record, "%-10s", black_previous_input);
+                break;
+        }
+        
+
+        fflush(record);
+        recorded_check = false;
+    }
+
+
+    fclose(record);
+    record = NULL;
+
+    if (check)
+        return 0;
+
+    // move success
+    count_moves++; 
+
+    return 0;
+}
+
+
+int parser (int board[S_BOARD][S_BOARD], char *input, moveSet *move, const int king)
+{
+    int invalid_move = 0;
+
+  
+  /* Great Barrier of Input Validation */
     switch (input[0])
     {
         // FOR PAWNS ONLY
@@ -626,10 +736,12 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         }
     }
 
+
     move->orig_x -= 'a';
     move->orig_y -= '0' + 1;
     move->dest_x -= 'a';
     move->dest_y -= '0' + 1;
+
 
     switch (move->piece)
     {
@@ -649,105 +761,6 @@ int moveBoard(int board[S_BOARD][S_BOARD])
         usleep(700000);
         return -1;
     }
-
-
-    // reset
-    check = false;
-
-    switch (outcome(board, count_moves, king))
-    {
-        case CHECKMATE: 
-            proceedGame(false);
-            checkmate = true;
-            break;
-        
-        case STALEMATE:
-            proceedGame(false);
-            stalemate = true;
-            break;
-
-        case ISCHECK:
-            printf("Check after\n");
-            pawnMoved(0, UNDO);
-            memcpy(board, undo_board, sizeof undo_board);
-
-
-            check = true;
-            break;
-    }
-
-
-
-    if (!check)
-    {
-        switch (king)
-        {
-            case w_K:
-                fprintf(record, "\n");
-                fflush(record);
-                break;
-        }
-    }
-
-
-    if (!check)
-    {
-        existing_pieces_after = countExistingPieces(board);
-
-
-        switch (king)
-        {
-            case w_K:
-                strncpy(white_previous_input, input, MAX_CHAR);
-                white_previous_input[MAX_CHAR - 1] = '\0';
-            break;
-
-            case b_K:
-                strncpy(black_previous_input, input, MAX_CHAR);
-                black_previous_input[MAX_CHAR - 1] = '\0';
-            break;
-        }
-
-        // if number of pieces before is greater, then implies that capture took place
-        if (existing_pieces_before > existing_pieces_after)
-        {
-            switch (king)
-            {
-                case w_K:
-                    insertXforCapture(white_previous_input);
-                    break;
-
-                case b_K:
-                    insertXforCapture(black_previous_input);
-                    break;
-            }
-        }
-
-        switch (king)
-        {
-            case w_K:
-                fprintf(record, "%d. %-10s", count_moves / 2 + 1, white_previous_input);
-                break;
-
-            case b_K:
-                fprintf(record, "%-10s", black_previous_input);
-                break;
-        }
-        
-
-        fflush(record);
-        recorded_check = false;
-    }
-
-
-    fclose(record);
-    record = NULL;
-
-    if (check)
-        return 0;
-
-    // move success
-    count_moves++; 
 
     return 0;
 }
