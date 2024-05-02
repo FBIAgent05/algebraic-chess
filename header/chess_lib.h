@@ -1,5 +1,3 @@
-// all functions and libraries necessary for chess
-
 #ifndef CHESS_LIB_H
 #define CHESS_LIB_H
 
@@ -232,16 +230,19 @@ void initBoard(int board[S_BOARD][S_BOARD]);
 void printBoard (int board[S_BOARD][S_BOARD]);
 int outcome (int board[S_BOARD][S_BOARD], int count_moves, const int king);
 
-bool displayASCII();
+bool displayASCII(void);
 bool useASCII (bool x);
 
-bool gameinProgress();
+bool gameinProgress(void);
 bool proceedGame (bool x);
 
 
 
 // move.h
 int moveBoard(int board[S_BOARD][S_BOARD]);
+
+int parser (int board[S_BOARD][S_BOARD], char *input, moveSet *move, const int king);
+
 int relocatePiece (coords find_piece[], int board[S_BOARD][S_BOARD], moveSet *move, int count_piece);
 int squareOccupiedbyAlly (int board[S_BOARD][S_BOARD], moveSet *move, const int king);
 
