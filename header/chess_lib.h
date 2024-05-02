@@ -1,3 +1,5 @@
+// all functions and libraries necessary for chess
+
 #ifndef CHESS_LIB_H
 #define CHESS_LIB_H
 
