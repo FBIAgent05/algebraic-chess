@@ -22,6 +22,8 @@ This is a simple console-based chess game implemented in C. The game follows the
 
 **Update in 2024-05-02**
 - Saves game to a PGN file
+- Automatically add the 'x' or '+' when capture and check respectively in inputs to PGN file
+- More informative invalid input warning messages
 - Multiple source files
 - ~~Less spaghetti code~~
 
