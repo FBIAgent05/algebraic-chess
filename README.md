@@ -110,9 +110,8 @@ Pawn from ```e``` file does an en passant to pawn in e5            --> ```exd6``
   
   <br>
 
-  <hr>
- For more information, refer to this Wikipedia article
-  
+
+ For more information, refer to this Wikipedia article  
   https://en.wikipedia.org/wiki/Algebraic_notation_(chess)#Notation_for_moves
 
   <br>
@@ -123,5 +122,8 @@ Pawn from ```e``` file does an en passant to pawn in e5            --> ```exd6``
 - No
 2) Does it work?
 - Yes
+
+
+  <hr>
 
 
