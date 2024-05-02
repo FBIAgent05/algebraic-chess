@@ -16,7 +16,7 @@ This is a simple console-based chess game implemented in C. The game follows the
 - Uses Unicode and ASCII characters to represent the chessboard and pieces.
 - Supports two-player gameplay.
 - Displays helpful messages for invalid moves and game outcomes.
-
+- Saves game to a PGN file (relatively new feature).
 
 <br>
 
@@ -35,17 +35,17 @@ git clone https://github.com/FBIAgent05/algebraic-chess
 2. Navigate the repository
 
 ```bash
-cd ./algebraic-chess/main
+cd ./algebraic-chess/
 ```
 3. Compile the source code
 
 ```bash
-gcc -o chess_alpha chess_alpha.c
+make
 ```
 
 4. Run the executable
 ```bash
-./chess_alpha
+./chess
 ```
 
 
