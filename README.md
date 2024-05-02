@@ -71,9 +71,8 @@ make
 
   Example:<br>
   Knight moves to ```c6``` would be ```Ke6```<br>
-  Pawn moves to ```e4``` would be ```e4```
+  Pawn moves to ```e4``` would be ```e4```<br>
 
-  <br>
 
   ### Capture
 
@@ -82,7 +81,7 @@ make
 
   Example:<br>
   Pawn from ```e```  captures piece in ```d4``` square     --> ```exd4```<br>
-  Rook captures piece in ```a8 ``` square                                    --> ```Rxa8```<br>
+  Rook captures piece in ```a8 ``` square                                     --> ```Rxa8```<br>
 
 
   ### Castling
@@ -104,11 +103,15 @@ Pawn captures piece from ```h``` file to ```g8``` and promotes to a Queen    -->
 Important note:
 En passant destination is not equal to the enemy pawn piece's square
 
-Example:
-Pawn from does an en passant to pawn in d5                  --> ```
+Example:<br>
+Pawn from ```e``` file does an en passant to pawn in e5            --> ```exd6```
+
+```d6``` because it is the pawn's destination
   
-  
-  Refer to this Wikipedia article
+  <br>
+
+  <hr>
+ For more information, refer to this Wikipedia article
   
   https://en.wikipedia.org/wiki/Algebraic_notation_(chess)#Notation_for_moves
 
