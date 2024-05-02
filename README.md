@@ -61,6 +61,53 @@ make
 
 
   ## How to Play
+
+### Moving
+
+  Identify the piece notation letter and specify its destination square:<br>
+
+  Note:
+  Pawn is not denoted by 'P' as it is not in the algebraic notation standards
+
+  Example:<br>
+  Knight moves to ```c6``` would be ```Ke6```<br>
+  Pawn moves to ```e4``` would be ```e4```
+
+  <br>
+
+  ### Capture
+
+  To capture, append  ```x``` as the second character input<br>
+  The program automatically add this   ```x``` for you by the way
+
+  Example:<br>
+  Pawn from ```e```  captures piece in ```d4``` square     --> ```exd4```<br>
+  Rook captures piece in ```a8 ``` square                                    --> ```Rxa8```<br>
+
+
+  ### Castling
+
+  Long Castle  --> ```O-O-O``` or ```0-0-0```<br>
+  Short Castle --> ```O-O``` or ```0-0``` <br>
+  
+  
+### Promotion
+
+Pawn move to last rank then specify the promotion piece
+
+Example:<br>
+Pawn moves to e8 and promotes to a knight                                                                            --> ```e8N```<br>
+Pawn captures piece from ```h``` file to ```g8``` and promotes to a Queen    -->  ```hxg8Q```<br>
+
+### En passant
+
+Important note:
+En passant destination is not equal to the enemy pawn piece's square
+
+Example:
+Pawn from does an en passant to pawn in d5                  --> ```
+  
+  
   Refer to this Wikipedia article
   
   https://en.wikipedia.org/wiki/Algebraic_notation_(chess)#Notation_for_moves
