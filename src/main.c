@@ -6,6 +6,7 @@
 
 
 #include "chess_lib.h"
+#include "UI.h"
 
 int main(void)
 {
@@ -21,7 +22,7 @@ int main(void)
         clear();
 
         printBoard(board);
-        moveBoard(board);
+        recordInput(board);
     }
 
     return 0;
