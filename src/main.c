@@ -5,7 +5,7 @@
                                                 /* 再改修: May, 02, 2024*/
 
 
-#include "../header/chess_lib.h"
+#include "chess_lib.h"
 
 int main(void)
 {
