@@ -38,88 +38,6 @@ void initBoard(int board[S_BOARD][S_BOARD])
 }
 
 
-void printBoard (int board[S_BOARD][S_BOARD])
-{
-    printf("\n    ______________________\n");
-
-    for (int i = S_BOARD - 1; i >= 0; i--)
-    {
-        printf("%d  |", i + 1);
-
-        for (int j = 0; j < S_BOARD; j++)
-        {
-           switch (board[j][i])
-           {
-                // print white pieces
-                case w_P1 ... w_P8:
-                    printf("%s%s%s  ", WHITE, displayASCII() ? "p" : "♟︎", RESET);
-                    break;
-
-                case w_dR: case w_lR:
-                case w_R1xx ... w_R8xx:
-                    printf("%s%s%s  ", WHITE, displayASCII() ? "R" : "♜", RESET);
-                    break;
-
-                case w_dN: case w_lN:
-                case w_N1xx ... w_N8xx:
-                    printf("%s%s%s  ", WHITE, displayASCII() ? "N" : "♞", RESET);
-                    break;
-
-                case w_dB: case w_lB:
-                case w_B1xx ...  w_B8xx:
-                    printf("%s%s%s  ", WHITE, displayASCII() ? "B" : "♝", RESET);
-                    break;
-
-                case w_Q:
-                case w_Q1xx ... w_Q8xx:
-                    printf("%s%s%s  ", WHITE, displayASCII() ? "Q" : "♛", RESET);
-                    break;
-
-                case w_K:
-                    printf("%s%s%s  ", WHITE, displayASCII() ? "K" : "♚", RESET);
-                    break;
-
-                // print black pieces
-                case b_P1 ... b_P8:
-                    printf("%s%s%s  ", BROWN, displayASCII() ? "p" : "♟︎", RESET);
-                    break;
-
-                case b_dR: case b_lR:
-                case b_R1xx ... b_R8xx:
-                    printf("%s%s%s  ", BROWN, displayASCII() ? "R" : "♜", RESET);
-                    break;
-
-                case b_dN: case b_lN:
-                case b_N1xx ... b_N8xx:
-                    printf("%s%s%s  ", BROWN, displayASCII() ? "N" : "♞", RESET);
-                    break;
-
-                case b_dB: case b_lB:
-                case b_B1xx ... b_B8xx:
-                    printf("%s%s%s  ", BROWN, displayASCII() ? "B" : "♝", RESET);
-                    break;
-
-                case b_Q:
-                case b_Q1xx ... b_Q8xx:
-                    printf("%s%s%s  ", BROWN, displayASCII() ? "Q" : "♛", RESET);
-                    break;
-
-                case b_K:
-                    printf("%s%s%s  ", BROWN, displayASCII() ? "K" : "♚", RESET);
-                    break;
-
-                default:
-                    printf("%c  ", (i + j)  % 2 == 0 ? '.' : ' ');
-                    break;
-           }
-        }
-        printf("\b\b|");
-        printf("\n");
-    }
-
-    printf("    ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾\n");
-    printf("    a  b  c  d  e  f  g  h\n\n");
-}
 
 
 int outcome (int board[S_BOARD][S_BOARD], const int count_moves, const int king)
@@ -154,22 +72,6 @@ int outcome (int board[S_BOARD][S_BOARD], const int count_moves, const int king)
 }
 
 
-bool displayASCII(void)
-{
-    return useASCII(false);
-}
-
-bool useASCII (bool x)
-{
-    static int proceed = false;
-
-    if (x)
-        proceed = true;
-
-
-    return proceed;
-}
-
 bool gameinProgress (void)
 {
     return proceedGame(true);
@@ -187,24 +89,11 @@ bool proceedGame (bool x)
 
 
 
-
-// how to add the '+' when check on a string
-
-int moveBoard(int board[S_BOARD][S_BOARD])
+int recordInput(int board[S_BOARD][S_BOARD])
 {
     int undo_board[S_BOARD][S_BOARD];
     memcpy(undo_board, board, sizeof undo_board);
 
-    static char saveGame[MAX_CHAR] = {'\0'};
-
-    if (saveGame[0] == '\0')
-    {
-        getTime(saveGame, MAX_CHAR);
-        pushbackStr(saveGame, ".pgn", MAX_CHAR);
-    }
-
-    // responsible for recording moves to a pgn file
-    FILE *record = fopen(saveGame, "a+");
 
     static int count_moves = 0;
     int existing_pieces_before = countExistingPieces(board);
@@ -224,7 +113,16 @@ int moveBoard(int board[S_BOARD][S_BOARD])
     int king = count_moves % 2 ? b_K : w_K;
 
 
+    static char saveGame[MAX_CHAR] = {'\0'};
 
+    if (saveGame[0] == '\0')
+    {
+        getTime(saveGame, MAX_CHAR);
+        pushbackStr(saveGame, ".pgn", MAX_CHAR);
+    }
+
+    // responsible for recording moves to a pgn file
+    FILE *record = fopen(saveGame, "a+");
 
 
     switch (outcome(board, count_moves, king))
@@ -296,48 +194,9 @@ int moveBoard(int board[S_BOARD][S_BOARD])
     printf("%s%s%s >> %s\n", WHITE, displayASCII() ? "W" : "♚", RESET, white_previous_input);
     printf("%s%s%s >> %s\n", BROWN, displayASCII() ? "B" : "♚", RESET, black_previous_input);
 
-    printf("\n%s --> Enter move #%d: ", count_moves % 2 ? "Black" : "White", count_moves / 2 + 1);
-    stringInput(input, MAX_CHAR);
 
 
-
-
-    moveSet newMove;
-    moveSet *move = &newMove;
-
-
-
-    if (strncmp(input, "O-O-O", MAX_CHAR) == 0 || strncmp(input, "0-0-0", MAX_CHAR) == 0)
-    {
-        if (castling(board, LONG_CASTLE, king) == PREVENT_CASTLE)
-        {
-            memcpy(board, undo_board, sizeof undo_board);
-            usleep(700000);
-
-            return -1;
-        }
-
-        count_moves++;
-        return 0;
-    }
-
-    else if (strncmp(input, "O-O", MAX_CHAR) == 0 || strncmp(input, "0-0", MAX_CHAR) == 0)
-    {
-        if (castling(board, SHORT_CASTLE, king) == PREVENT_CASTLE)
-        {
-            memcpy(board, undo_board, sizeof undo_board);
-
-            usleep(700000);
-            return -1;
-        }
-
-        count_moves++;
-        return 0;
-    }
-
-
-
-    if (parser(board, input, move, king))
+    if (parser(board, input, count_moves))
         return -1;
 
 
@@ -369,17 +228,11 @@ int moveBoard(int board[S_BOARD][S_BOARD])
 
 
 
-    if (!check)
+    if (!check && king == w_K)
     {
-        switch (king)
-        {
-            case w_K:
-                fprintf(record, "\n");
-                fflush(record);
-                break;
-        }
+        fprintf(record, "\n");
+        fflush(record);
     }
-
 
     if (!check)
     {
@@ -435,7 +288,7 @@ int moveBoard(int board[S_BOARD][S_BOARD])
     record = NULL;
 
     if (check)
-        return 0;
+        return -1;
 
     // move success
     count_moves++; 
@@ -444,9 +297,45 @@ int moveBoard(int board[S_BOARD][S_BOARD])
 }
 
 
-int parser (int board[S_BOARD][S_BOARD], char *input, moveSet *move, const int king)
+int parser (int board[S_BOARD][S_BOARD], char *input, int count_moves)
 {
+    int undo_board[S_BOARD][S_BOARD];
+    memcpy(undo_board, board, sizeof undo_board);
+    
+    int king = count_moves % 2 ? b_K : w_K;
+    int castling_type = 0;
+
     int invalid_move = 0;
+
+
+    printf("\n%s --> Enter move #%d: ", count_moves % 2 ? "Black" : "White", count_moves / 2 + 1);
+    stringInput(input, MAX_CHAR);
+
+
+
+    if (strncmp(input, "O-O-O", MAX_CHAR) == 0 || strncmp(input, "0-0-0", MAX_CHAR) == 0)
+        castling_type = LONG_CASTLE;
+
+    else if (strncmp(input, "O-O", MAX_CHAR) == 0 || strncmp(input, "0-0", MAX_CHAR) == 0)
+        castling_type = SHORT_CASTLE;
+
+
+    if (castling_type)
+    {
+        if (castling(board, castling_type, king) == PREVENT_CASTLE)
+        {
+            memcpy(board, undo_board, sizeof undo_board);
+
+            usleep(700000);
+            return -1;
+        }
+        // castling success
+        return 0;
+    }
+
+
+    moveSet newMove;
+    moveSet *move = &newMove;
 
   
   /* Great Barrier of Input Validation */
