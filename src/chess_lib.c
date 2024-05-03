@@ -1,4 +1,4 @@
-#include "../header/chess_lib.h"
+#include "chess_lib.h"
 
 
 void initBoard(int board[S_BOARD][S_BOARD])
