@@ -10,6 +10,7 @@
 #include <math.h>
 #include <string.h>
 #include "gen_tools.h"
+#include "UI.h"
 
 #define S_BOARD 8
 #define MAX_CHAR 256
@@ -227,11 +228,7 @@ castlingGap;
 
 // board.h
 void initBoard(int board[S_BOARD][S_BOARD]);
-void printBoard (int board[S_BOARD][S_BOARD]);
 int outcome (int board[S_BOARD][S_BOARD], int count_moves, const int king);
-
-bool displayASCII(void);
-bool useASCII (bool x);
 
 bool gameinProgress(void);
 bool proceedGame (bool x);
@@ -239,9 +236,9 @@ bool proceedGame (bool x);
 
 
 // move.h
-int moveBoard(int board[S_BOARD][S_BOARD]);
+int recordInput(int board[S_BOARD][S_BOARD]);
 
-int parser (int board[S_BOARD][S_BOARD], char *input, moveSet *move, const int king);
+int parser (int board[S_BOARD][S_BOARD], char *input, int count_moves);
 
 int relocatePiece (coords find_piece[], int board[S_BOARD][S_BOARD], moveSet *move, int count_piece);
 int squareOccupiedbyAlly (int board[S_BOARD][S_BOARD], moveSet *move, const int king);
