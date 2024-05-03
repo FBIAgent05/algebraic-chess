@@ -1,7 +1,7 @@
 CC = clang
 CFLAGS = -Wall
 TARGET = chess
-SRCS = ./src/main.c ./src/chess_lib.c ./src/gen_tools.c
+SRCS = ./src/main.c ./src/chess_lib.c ./src/gen_tools.c ./src/UI.c
 OBJS = $(SRCS:.c=.o)
 
 .PHONY: all clean
