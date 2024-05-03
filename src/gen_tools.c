@@ -1,4 +1,4 @@
-#include "../header/gen_tools.h"
+#include "gen_tools.h"
 
 
 int popFile (char *filename, int delete_ch)
